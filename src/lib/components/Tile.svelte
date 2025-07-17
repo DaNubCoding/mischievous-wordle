@@ -19,6 +19,7 @@
 	width: 50px;
 	aspect-ratio: 1;
 	text-align: center;
+	align-content: center;
 	font-size: 2rem;
 	border: 2px solid $border-color;
 	margin: 5px;
