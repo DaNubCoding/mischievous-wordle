@@ -56,6 +56,8 @@
 				animating = true;
 				setTimeout(() => {
 					animating = false;
+					statuses = {};
+					lies = {};
 				}, 500 * COLS + 500);
 			}
 		}
