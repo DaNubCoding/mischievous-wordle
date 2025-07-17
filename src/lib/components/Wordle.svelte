@@ -13,6 +13,7 @@
 				() => ({
 					letter: "",
 					status: "empty" as "empty" | "input" | "correct" | "present" | "absent",
+					flipping: false,
 				})
 			)
 		)
@@ -24,7 +25,11 @@
 	let row = $state(0);
 	let col = $state(0);
 
+	let animating = false;
+
 	function handleKeyDown(event: KeyboardEvent) {
+		if (animating) return;
+
 		const key = event.key;
 
 		if (/^[a-zA-Z]$/.test(key)) {
@@ -42,26 +47,46 @@
 		} else if (key === "Enter") {
 			if (col === COLS) {
 				checkWord(row);
-				applyLies(row);
+				determineLies(row);
+				playFlipAnimation(row);
+
 				row++;
 				col = 0;
+
+				animating = true;
+				setTimeout(() => {
+					animating = false;
+				}, 500 * COLS + 500);
 			}
 		}
 	}
 
 	function checkWord(row: number) {
+		// Store the statuses first
 		board[row].forEach((tile, i) => {
 			if (tile.letter === WORD[i]) {
-				tile.status = "correct";
+				statuses[i] = "correct";
 			} else if (WORD.includes(tile.letter)) {
-				tile.status = "present";
+				statuses[i] = "present";
 			} else {
-				tile.status = "absent";
+				statuses[i] = "absent";
 			}
 		});
+
+		board[row].forEach((tile, i) => setTimeout(() => {
+			if (i in lies) {
+				tile.status = lies[i];
+				return;
+			}
+			tile.status = statuses[i];
+		}, 500 * i + 500));
+		// + 500 to apply the class right at the middle of the flip animation
 	}
 
-	function applyLies(row: number) {
+	let statuses: { [key: number]: "correct" | "present" | "absent" } = {};
+	let lies: { [key: number]: "correct" | "present" | "absent" } = {};
+
+	function determineLies(row: number) {
 		// Decide how many lies (1 to 3)
 		const liesCount = Math.floor(Math.random() * 3 + 1);
 		let indices = [0, 1, 2, 3, 4];
@@ -74,15 +99,24 @@
 
 			let allStatuses = ["correct", "present", "absent"];
 			// Remove current status to avoid the lie being the same one
-			allStatuses.splice(allStatuses.indexOf(board[row][tileIndex].status), 1);
+			console.log(statuses[tileIndex]);
+			allStatuses.splice(allStatuses.indexOf(statuses[tileIndex]), 1);
 			// Randomly select a new status from the remaining two statuses
 			const newStatus = allStatuses[Math.round(Math.random())];
-			console.log(`Letter ${board[row][tileIndex].letter} at ${tileIndex} changed from ${board[row][tileIndex].status} to ${newStatus}`);
-			// Apply the new status to the tile
-			board[row][tileIndex].status = newStatus as "correct" | "present" | "absent";
+			console.log(`Letter ${board[row][tileIndex].letter} at ${tileIndex} changed from ${statuses[tileIndex]} to ${newStatus}`);
+			lies[tileIndex] = newStatus as "correct" | "present" | "absent";
 		}
 
 		lieCounters[row] += liesCount;
+	}
+
+	function playFlipAnimation(row: number) {
+		board[row].forEach((tile, i) => setTimeout(() => {
+			tile.flipping = true;
+			setTimeout(() => {
+				tile.flipping = false;
+			}, 1000); // undo flag after 100ms of animation
+		}, 500 * i));
 	}
 
 	onMount(() => {
@@ -102,7 +136,7 @@
 				<div class="left-spacer"></div>
 				<div class="tile-row">
 					{#each row as tile, j}
-						<Tile letter={tile.letter} status={tile.status} colIndex={j} />
+						<Tile letter={tile.letter} status={tile.status} flipping={tile.flipping} />
 					{/each}
 				</div>
 				<div class="lie-counter" class:visible={lieCounters[i] > 0}>
@@ -138,7 +172,6 @@
 .tile-row-container {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 	gap: 10px;
 }
 
