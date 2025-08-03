@@ -55,10 +55,13 @@
 	margin: 5px;
 
 	&.empty {
+		background-color: $bg-color;
+
 		animation: unpop 0.1s ease;
 	}
 
 	&.input {
+		background-color: $bg-color;
 		border-color: $input-border-color;
 
 		animation: pop 0.1s ease;
