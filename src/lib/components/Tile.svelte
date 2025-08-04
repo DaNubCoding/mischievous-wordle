@@ -1,11 +1,26 @@
 <script lang="ts">
+	import { type TileStatus } from "./types";
+
 	interface TileProps {
 		letter: string;
-		status: "empty" | "input" | "correct" | "present" | "absent";
-		flipping: boolean;
+		status: TileStatus;
 	}
 
-	let { letter, status, flipping }: TileProps = $props();
+	let { letter, status }: TileProps = $props();
+	let flipping = $state(false);
+
+	export function flip(newStatus: TileStatus, duration: number) {
+		flipping = true;
+
+		setTimeout(() => {
+			status = newStatus;
+			console.log("hi");
+		}, duration / 2);
+
+		setTimeout(() => {
+			flipping = false;
+		}, duration);
+	}
 
 </script>
 
@@ -98,7 +113,7 @@
 	}
 
 	&.flipping {
-		animation: flip 1s ease-in-out;
+		animation: flip 0.8s ease-in-out;
 	}
 }
 
