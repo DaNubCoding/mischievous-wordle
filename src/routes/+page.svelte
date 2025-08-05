@@ -18,8 +18,8 @@
 
 @font-face {
 	font-family: "WordleFont";
-	src: url("neue-helvetica-75-bold.otf") format("opentype");
-	font-weight: 600;
+	src: url("neue-helvetica-75-bold.woff2") format("woff2");
+	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
@@ -28,6 +28,7 @@
 	background-color: $bg-color;
 	color: $text-color;
 	font-family: "WordleFont", sans-serif;
+	font-weight: 400;
 }
 
 #main-container {
