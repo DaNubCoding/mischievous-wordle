@@ -12,23 +12,17 @@
 
 
 
-<style lang="scss">
+<style global lang="scss">
 
 @use "$lib/styles/theme.scss" as *;
-
-@font-face {
-	font-family: "WordleFont";
-	src: url("neue-helvetica-75-bold.woff2") format("woff2");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
 
 :root {
 	background-color: $bg-color;
 	color: $text-color;
-	font-family: "WordleFont", sans-serif;
-	font-weight: 400;
+	font-family: sans-serif;
+	font-weight: 700;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 #main-container {
