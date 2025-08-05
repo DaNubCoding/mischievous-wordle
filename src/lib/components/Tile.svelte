@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type TileStatus } from "./types";
+	import { type TileStatus } from "../types";
 
 	interface TileProps {
 		letter: string;

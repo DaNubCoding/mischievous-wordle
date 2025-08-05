@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import Tile from "./Tile.svelte";
-	import { type TileStatus } from "./types";
+	import { type TileStatus } from "../types";
 	import { getStatuses } from "./validation";
 
 	const ROWS = 6;
@@ -52,12 +52,11 @@
 		}
 	}
 
-	function checkWord(row: number) {
-		lieCounters[row] = Math.floor(Math.random() * 3) + 1;
-		let statuses = getStatuses(
-			board[row].map(tile => tile.letter).join(""),
-			lieCounters[row]
+	async function checkWord(row: number) {
+		let { statuses, lieCount } = await getStatuses(
+			board[row].map(tile => tile.letter).join(""), row
 		);
+		lieCounters[row] = lieCount;
 
 		// Flip each tile in the row with a delay
 		tiles[row].forEach((tile, i) => setTimeout(() => {
