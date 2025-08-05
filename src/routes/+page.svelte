@@ -19,6 +19,9 @@
 @font-face {
 	font-family: "WordleFont";
 	src: url("neue-helvetica-75-bold.otf") format("opentype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
 }
 
 :root {
