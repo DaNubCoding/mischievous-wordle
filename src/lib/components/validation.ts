@@ -27,7 +27,6 @@ export function getStatuses(word: string, liesCount: number): TileStatus[] {
 
         let allStatuses = ["correct", "present", "absent"];
         // Remove current status to avoid the lie being the same one
-        console.log(statuses[tileIndex]);
         allStatuses.splice(allStatuses.indexOf(statuses[tileIndex]), 1);
         // Randomly select a new status from the remaining two statuses
         const newStatus = allStatuses[Math.round(Math.random())];

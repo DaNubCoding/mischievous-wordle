@@ -14,7 +14,6 @@
 
 		setTimeout(() => {
 			status = newStatus;
-			console.log("hi");
 		}, duration / 2);
 
 		setTimeout(() => {
